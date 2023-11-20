@@ -23,6 +23,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<TodoList>(
           create: (context) => TodoList(),
         ),
+        // =====================================================
+        // ChangeNotifierProxyProvider
+        // value: TodoList의 값을 기준으로 ActiveTodoCount를 업데이트
+        // =====================================================
         ChangeNotifierProxyProvider<TodoList, ActiveTodoCount>(
           create: (context) => ActiveTodoCount(),
           update: (
@@ -43,7 +47,7 @@ class MyApp extends StatelessWidget {
             filteredTodo,
           ) =>
               filteredTodo!..update(todoFilter, todoSearch, todoList),
-        )
+        ),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
