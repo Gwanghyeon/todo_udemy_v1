@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           create: (context) => FilteredTodo(),
           update: (context, todoFilter, todoSearch, todoList, filteredTodo) =>
               filteredTodo!..update(todoFilter, todoSearch, todoList),
-        )
+        ),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
