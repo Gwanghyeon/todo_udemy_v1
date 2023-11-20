@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_v1/model/todo_model.dart';
@@ -35,13 +34,10 @@ class FilteredTodoState extends Equatable {
   @override
   bool get stringify => true;
 
-  FilteredTodoState copyWith({
-    List<Todo>? filteredTodoList,
-  }) {
-    return FilteredTodoState(
-      filteredTodoList: filteredTodoList ?? this.filteredTodoList,
-    );
-  }
+  FilteredTodoState copyWith({List<Todo>? filteredTodoList}) =>
+      FilteredTodoState(
+        filteredTodoList: filteredTodoList ?? this.filteredTodoList,
+      );
 }
 
 class FilteredTodo with ChangeNotifier {
