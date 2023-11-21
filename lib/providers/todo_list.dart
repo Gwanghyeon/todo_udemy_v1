@@ -73,6 +73,7 @@ class TodoList with ChangeNotifier {
     }).toList();
 
     _state = _state.copyWith(todoList: newTodoList);
+    notifyListeners();
   }
 
   // ==============================
