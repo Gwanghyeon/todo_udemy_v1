@@ -3,21 +3,6 @@ import 'package:flutter/material.dart';
 
 enum Filter { all, active, completed }
 
-// ====================================
-// provider to filter todo items
-// setting the state of the todo item
-// ====================================
-
-class TodoFilter with ChangeNotifier {
-  TodoFilterState _state = TodoFilterState.initial();
-  TodoFilterState get state => _state;
-
-  void changeFilter(Filter newFilter) {
-    _state = _state.copyWith(filter: newFilter);
-    notifyListeners();
-  }
-}
-
 class TodoFilterState extends Equatable {
   final Filter filter;
 
@@ -37,5 +22,20 @@ class TodoFilterState extends Equatable {
 
   TodoFilterState copyWith({Filter? filter}) {
     return TodoFilterState(filter: filter ?? this.filter);
+  }
+}
+
+// ====================================
+// provider to filter todo items
+// setting the state of the todo item
+// ====================================
+
+class TodoFilter with ChangeNotifier {
+  TodoFilterState _state = TodoFilterState.initial();
+  TodoFilterState get state => _state;
+
+  void changeFilter(Filter newFilter) {
+    _state = _state.copyWith(filter: newFilter);
+    notifyListeners();
   }
 }
