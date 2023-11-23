@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_v1/components/todo_container.dart';
 import 'package:todo_v1/providers/providers.dart';
+import 'package:todo_v1/utils/debounce.dart';
 
 class TodoPage extends StatelessWidget {
   const TodoPage({super.key});
@@ -90,7 +91,8 @@ class _CreateTodoState extends State<CreateTodo> {
 
 // Handling SearchTerm, filter to show Todo items
 class SearchAndFilterTodo extends StatelessWidget {
-  const SearchAndFilterTodo({super.key});
+  final debounce = Debounce();
+  SearchAndFilterTodo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +110,11 @@ class SearchAndFilterTodo extends StatelessWidget {
           // 입력될 때 마다 검색을 실시
           onChanged: (String? newSearchTerm) {
             if (newSearchTerm != null) {
-              context.read<TodoSearch>().setSearchTerm(newSearchTerm);
+              // debounce 의 run 함수로 검색함수를 실행
+              // Search after 500 milliseconds
+              debounce.run(() {
+                context.read<TodoSearch>().setSearchTerm(newSearchTerm);
+              });
             }
           },
         ),

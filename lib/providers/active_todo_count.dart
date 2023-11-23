@@ -11,6 +11,7 @@ class ActiveTodoCountState extends Equatable {
   });
 
   factory ActiveTodoCountState.initial() {
+    // activeTodoCount: ProxyProvider 에 의해 앱 시작시 바로 update
     return const ActiveTodoCountState(activeTodoCount: 0);
   }
 
@@ -30,7 +31,13 @@ class ActiveTodoCountState extends Equatable {
 // ActiveTodoCountState를 관리하는 클래스
 // ==================================
 class ActiveTodoCount with ChangeNotifier {
-  ActiveTodoCountState _state = ActiveTodoCountState.initial();
+  late ActiveTodoCountState _state;
+  final int initialCountvalue;
+
+  ActiveTodoCount({required this.initialCountvalue}) {
+    _state = ActiveTodoCountState(activeTodoCount: initialCountvalue);
+  }
+
   ActiveTodoCountState get state => _state;
 
   void update(TodoList todoList) {

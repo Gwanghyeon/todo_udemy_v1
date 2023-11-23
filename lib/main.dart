@@ -28,14 +28,18 @@ class MyApp extends StatelessWidget {
         // value: TodoList의 값을 기준으로 ActiveTodoCount를 업데이트
         // =====================================================
         ChangeNotifierProxyProvider<TodoList, ActiveTodoCount>(
-          create: (context) => ActiveTodoCount(),
+          create: (context) => ActiveTodoCount(
+            initialCountvalue: context.read<TodoList>().state.todoList.length,
+          ),
           update:
               (context, TodoList todoList, ActiveTodoCount? activeTodoCount) =>
                   activeTodoCount!..update(todoList),
         ),
         ChangeNotifierProxyProvider3<TodoFilter, TodoSearch, TodoList,
             FilteredTodo>(
-          create: (context) => FilteredTodo(),
+          create: (context) => FilteredTodo(
+            initialFiletedTodo: context.read<TodoList>().state.todoList,
+          ),
           update: (context, todoFilter, todoSearch, todoList, filteredTodo) =>
               filteredTodo!..update(todoFilter, todoSearch, todoList),
         ),

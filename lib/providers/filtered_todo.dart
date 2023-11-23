@@ -2,9 +2,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_v1/model/todo_model.dart';
-import 'package:todo_v1/providers/todo_filter.dart';
-import 'package:todo_v1/providers/todo_list.dart';
-import 'package:todo_v1/providers/todo_search.dart';
+import 'package:todo_v1/providers/providers.dart';
 
 // ==========================================
 // 사용자가 직접 접근하는 항목들의 상태관리를 위한 클래스
@@ -35,7 +33,13 @@ class FilteredTodoState extends Equatable {
 }
 
 class FilteredTodo with ChangeNotifier {
-  FilteredTodoState _state = FilteredTodoState.initial();
+  late FilteredTodoState _state;
+  final List<Todo> initialFiletedTodo;
+
+  FilteredTodo({required this.initialFiletedTodo}) {
+    _state = FilteredTodoState(filteredTodoList: initialFiletedTodo);
+  }
+
   FilteredTodoState get state => _state;
 
   // list, filter value, searchTerm 에 대한 정보가 필요함
