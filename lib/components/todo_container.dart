@@ -76,6 +76,7 @@ class _TodoContainerState extends State<TodoContainer> {
                                   ? true
                                   : false;
                               if (!_error) {
+                                // 수정된 내용을 반영
                                 context.read<TodoList>().editTodo(
                                     todo.id, textEditingController.text);
                                 Navigator.pop(context);

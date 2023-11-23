@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         // =====================================================
         ChangeNotifierProxyProvider<TodoList, ActiveTodoCount>(
           create: (context) => ActiveTodoCount(
+            // 초기값으로 Provider에서 제공된 값으로 생성
             initialCountvalue: context.read<TodoList>().state.todoList.length,
           ),
           update:
