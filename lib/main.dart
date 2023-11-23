@@ -27,22 +27,17 @@ class MyApp extends StatelessWidget {
         // ChangeNotifierProxyProvider
         // value: TodoList의 값을 기준으로 ActiveTodoCount를 업데이트
         // =====================================================
-        ChangeNotifierProxyProvider<TodoList, ActiveTodoCount>(
-          create: (context) => ActiveTodoCount(
-            // 초기값으로 Provider에서 제공된 값으로 생성
-            initialCountvalue: context.read<TodoList>().state.todoList.length,
-          ),
-          update:
-              (context, TodoList todoList, ActiveTodoCount? activeTodoCount) =>
-                  activeTodoCount!..update(todoList),
+        ProxyProvider<TodoList, ActiveTodoCount>(
+          update: (context, TodoList todoList, _) =>
+              ActiveTodoCount(todoList: todoList),
         ),
-        ChangeNotifierProxyProvider3<TodoFilter, TodoSearch, TodoList,
-            FilteredTodo>(
-          create: (context) => FilteredTodo(
-            initialFiletedTodo: context.read<TodoList>().state.todoList,
+        ProxyProvider3<TodoFilter, TodoSearch, TodoList, FilteredTodo>(
+          update: (context, todoFilter, todoSearch, todoList, _) =>
+              FilteredTodo(
+            todoFilter: todoFilter,
+            todoSearch: todoSearch,
+            todoList: todoList,
           ),
-          update: (context, todoFilter, todoSearch, todoList, filteredTodo) =>
-              filteredTodo!..update(todoFilter, todoSearch, todoList),
         ),
       ],
       child: const MaterialApp(

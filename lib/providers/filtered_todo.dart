@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:todo_v1/model/todo_model.dart';
 import 'package:todo_v1/providers/providers.dart';
 
@@ -32,43 +31,39 @@ class FilteredTodoState extends Equatable {
   }
 }
 
-class FilteredTodo with ChangeNotifier {
-  late FilteredTodoState _state;
-  final List<Todo> initialFiletedTodo;
+class FilteredTodo {
+  final TodoFilter todoFilter;
+  final TodoSearch todoSearch;
+  final TodoList todoList;
 
-  FilteredTodo({required this.initialFiletedTodo}) {
-    _state = FilteredTodoState(filteredTodoList: initialFiletedTodo);
-  }
+  FilteredTodo(
+      {required this.todoFilter,
+      required this.todoSearch,
+      required this.todoList});
 
-  FilteredTodoState get state => _state;
-
-  // list, filter value, searchTerm 에 대한 정보가 필요함
-  // using ProxyProvider: 의존값을 처음으로 얻을 때, 변경될 때마다 호출
-  void update(TodoFilter todoFilter, TodoSearch todoSearch, TodoList todoList) {
-    List<Todo> filteredTodoList;
+  FilteredTodoState get state {
+    List<Todo> _filteredTodoList;
 
     switch (todoFilter.state.filter) {
       case Filter.active:
-        filteredTodoList =
+        _filteredTodoList =
             todoList.state.todoList.where((todo) => !todo.completed).toList();
         break;
       case Filter.completed:
-        filteredTodoList =
+        _filteredTodoList =
             todoList.state.todoList.where((todo) => todo.completed).toList();
       case Filter.all:
       default:
-        filteredTodoList = todoList.state.todoList;
+        _filteredTodoList = todoList.state.todoList;
         break;
     }
 
     if (todoSearch.state.searchTerm.isNotEmpty) {
-      filteredTodoList = filteredTodoList
+      _filteredTodoList = _filteredTodoList
           .where((todo) =>
               todo.desc.toLowerCase().contains(todoSearch.state.searchTerm))
           .toList();
     }
-
-    _state = _state.copyWith(filteredTodoList: filteredTodoList);
-    notifyListeners();
+    return FilteredTodoState(filteredTodoList: _filteredTodoList);
   }
 }
