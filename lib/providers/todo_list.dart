@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:todo_v1/model/todo_model.dart';
 
 class TodoListState extends Equatable {
@@ -31,49 +31,45 @@ class TodoListState extends Equatable {
   }
 }
 
-class TodoList with ChangeNotifier {
-  TodoListState _state = TodoListState.initial();
-  TodoListState get state => _state;
+class TodoList extends StateNotifier<TodoListState> {
+  TodoList() : super(TodoListState.initial());
 
   // =============================
   // Add new Todo item in the list
   // =============================
   void addTodo(String todoDesc) {
     final newTodo = Todo(desc: todoDesc);
-    final newTodoList = [..._state.todoList, newTodo];
+    final newTodoList = [...state.todoList, newTodo];
 
-    _state = _state.copyWith(todoList: newTodoList);
-    notifyListeners();
+    state = state.copyWith(todoList: newTodoList);
   }
 
   // ===========================
   //  Edit description of Todo
   // ===========================
   void editTodo(String id, String newDesc) {
-    final newTodoList = _state.todoList.map((todo) {
+    final newTodoList = state.todoList.map((todo) {
       if (todo.id == id) {
         return Todo(id: id, desc: newDesc, completed: todo.completed);
       }
       return todo;
     }).toList();
 
-    _state = _state.copyWith(todoList: newTodoList);
-    notifyListeners();
+    state = state.copyWith(todoList: newTodoList);
   }
 
   // ===================================
   // Toggle isCompleted variable in Todo
   // ===================================
   void toggleTodo(String id) {
-    final newTodoList = _state.todoList.map((todo) {
+    final newTodoList = state.todoList.map((todo) {
       if (todo.id == id) {
         return Todo(id: id, desc: todo.desc, completed: !todo.completed);
       }
       return todo;
     }).toList();
 
-    _state = _state.copyWith(todoList: newTodoList);
-    notifyListeners();
+    state = state.copyWith(todoList: newTodoList);
   }
 
   // ==============================
@@ -81,9 +77,8 @@ class TodoList with ChangeNotifier {
   // ==============================
   void removeTodo(Todo targetTodo) {
     final newTodoList =
-        _state.todoList.where((todo) => todo.id != targetTodo.id).toList();
+        state.todoList.where((todo) => todo.id != targetTodo.id).toList();
 
-    _state = _state.copyWith(todoList: newTodoList);
-    notifyListeners();
+    state = state.copyWith(todoList: newTodoList);
   }
 }

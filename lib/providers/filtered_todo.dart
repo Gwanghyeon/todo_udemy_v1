@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:state_notifier/state_notifier.dart';
 import 'package:todo_v1/model/todo_model.dart';
 import 'package:todo_v1/providers/providers.dart';
 
@@ -32,43 +32,39 @@ class FilteredTodoState extends Equatable {
   }
 }
 
-class FilteredTodo with ChangeNotifier {
-  late FilteredTodoState _state;
-  final List<Todo> initialFiletedTodo;
-
-  FilteredTodo({required this.initialFiletedTodo}) {
-    _state = FilteredTodoState(filteredTodoList: initialFiletedTodo);
-  }
-
-  FilteredTodoState get state => _state;
+class FilteredTodo extends StateNotifier<FilteredTodoState> with LocatorMixin {
+  FilteredTodo() : super(FilteredTodoState.initial());
 
   // list, filter value, searchTerm 에 대한 정보가 필요함
   // using ProxyProvider: 의존값을 처음으로 얻을 때, 변경될 때마다 호출
-  void update(TodoFilter todoFilter, TodoSearch todoSearch, TodoList todoList) {
+  @override
+  void update(Locator watch) {
+    final todoList = watch<TodoListState>().todoList;
+    final currentFilter = watch<TodoFilterState>().filter;
+    final searchTerm = watch<TodoSearchState>().searchTerm;
+
     List<Todo> filteredTodoList;
 
-    switch (todoFilter.state.filter) {
+    // Set Filter ========================================
+    switch (currentFilter) {
       case Filter.active:
-        filteredTodoList =
-            todoList.state.todoList.where((todo) => !todo.completed).toList();
+        filteredTodoList = todoList.where((todo) => !todo.completed).toList();
         break;
       case Filter.completed:
-        filteredTodoList =
-            todoList.state.todoList.where((todo) => todo.completed).toList();
+        filteredTodoList = todoList.where((todo) => todo.completed).toList();
+        break;
       case Filter.all:
       default:
-        filteredTodoList = todoList.state.todoList;
+        filteredTodoList = todoList;
         break;
     }
 
-    if (todoSearch.state.searchTerm.isNotEmpty) {
+    if (searchTerm.isNotEmpty) {
       filteredTodoList = filteredTodoList
-          .where((todo) =>
-              todo.desc.toLowerCase().contains(todoSearch.state.searchTerm))
+          .where((todo) => todo.desc.toLowerCase().contains(searchTerm))
           .toList();
     }
-
-    _state = _state.copyWith(filteredTodoList: filteredTodoList);
-    notifyListeners();
+    state = state.copyWith(filteredTodoList: filteredTodoList);
+    super.update(watch);
   }
 }

@@ -1,19 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 
 // =========================================
 // provider of search terms
 // =========================================
-
-class TodoSearch with ChangeNotifier {
-  TodoSearchState _state = TodoSearchState.initial();
-  TodoSearchState get state => _state;
-
-  void setSearchTerm(String newSearchTerm) {
-    _state = _state.copyWith(searchTerm: newSearchTerm);
-    notifyListeners();
-  }
-}
 
 class TodoSearchState extends Equatable {
   final String searchTerm;
@@ -32,5 +22,13 @@ class TodoSearchState extends Equatable {
 
   TodoSearchState copyWith({String? searchTerm}) {
     return TodoSearchState(searchTerm: searchTerm ?? this.searchTerm);
+  }
+}
+
+class TodoSearch extends StateNotifier<TodoSearchState> {
+  TodoSearch() : super(TodoSearchState.initial());
+
+  void setSearchTerm(String newSearchTerm) {
+    state = state.copyWith(searchTerm: newSearchTerm);
   }
 }

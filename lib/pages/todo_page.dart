@@ -46,7 +46,7 @@ class TodoHeader extends StatelessWidget {
         Text('TODO'),
         // Listen to the count value of ActiveTodoCount
         Text(
-            '${context.watch<ActiveTodoCount>().state.activeTodoCount} items left'),
+            '${context.watch<ActiveTodoCountState>().activeTodoCount} items left'),
       ],
     );
   }
@@ -133,7 +133,7 @@ class SearchAndFilterTodo extends StatelessWidget {
   Widget FilterButton(BuildContext context, Filter filter) {
     // filter 에 따라 색상을 다르게 표시
     // 주어진 필터값과 비교를 하여 같으면 파란색으로 설정
-    final currentFilter = context.watch<TodoFilter>().state.filter;
+    final currentFilter = context.watch<TodoFilterState>().filter;
     final buttonColor = currentFilter == filter ? Colors.blue : Colors.grey;
 
     return TextButton(
@@ -159,7 +159,7 @@ class ShowTodos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todoList = context.watch<FilteredTodo>().state.filteredTodoList;
+    final todoList = context.watch<FilteredTodoState>().filteredTodoList;
     return ListView.separated(
       // ===============================
       // instead of using Expaned widget

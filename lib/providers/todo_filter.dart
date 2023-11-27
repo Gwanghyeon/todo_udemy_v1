@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:state_notifier/state_notifier.dart';
 
 enum Filter { all, active, completed }
 
@@ -30,12 +30,10 @@ class TodoFilterState extends Equatable {
 // setting the state of the todo item
 // ====================================
 
-class TodoFilter with ChangeNotifier {
-  TodoFilterState _state = TodoFilterState.initial();
-  TodoFilterState get state => _state;
+class TodoFilter extends StateNotifier<TodoFilterState> with LocatorMixin {
+  TodoFilter() : super(TodoFilterState.initial());
 
   void changeFilter(Filter newFilter) {
-    _state = _state.copyWith(filter: newFilter);
-    notifyListeners();
+    state = state.copyWith(filter: newFilter);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_v1/providers/todo_list.dart';
 
 class ActiveTodoCountState extends Equatable {
@@ -29,25 +30,19 @@ class ActiveTodoCountState extends Equatable {
 // ==================================
 // ActiveTodoCountState를 관리하는 클래스
 // ==================================
-class ActiveTodoCount with ChangeNotifier {
-  late ActiveTodoCountState _state;
-  final int initialCountvalue;
+// When values from other classes are needed, use LocatorMixin for read & watch
+class ActiveTodoCount extends StateNotifier<ActiveTodoCountState>
+    with LocatorMixin {
+  ActiveTodoCount() : super(ActiveTodoCountState.initial());
 
-  ActiveTodoCount({required this.initialCountvalue}) {
-    _state = ActiveTodoCountState(activeTodoCount: initialCountvalue);
-  }
-
-  ActiveTodoCountState get state => _state;
-
-  void update(TodoList todoList) {
-    // using ProxyProvider : todoList의 값이 변할때마다 호출
-    final int newActiveTodoCount = todoList.state.todoList
-        // Returning the todo items where the completed value is false
+  @override
+  void update(Locator watch) {
+    final newActiveTodoCount = watch<TodoListState>()
+        .todoList
         .where((todo) => !todo.completed)
         .toList()
         .length;
-
-    _state = _state.copyWith(activeTodoCount: newActiveTodoCount);
-    notifyListeners();
+    state = state.copyWith(activeTodoCount: newActiveTodoCount);
+    super.update(watch);
   }
 }
